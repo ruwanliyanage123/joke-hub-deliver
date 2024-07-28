@@ -1,15 +1,20 @@
-const mongoose = require("mongoose");
+const mysql = require("mysql2/promise");
+require("dotenv").config();
 
-const params = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
-
-const databaseConnection = () => {
-  mongoose
-    .connect("mongodb://localhost:27017/joke_hub", params)
-    .then(() => console.log("Database connected successfully..."))
-    .catch((err) => console.error("Database connection error:", err));
+const databaseConnection = async () => {
+  try {
+    const connection = await mysql.createConnection({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
+    });
+    console.log("Connected to MySQL database");
+    return connection;
+  } catch (error) {
+    console.error("Error connecting to MySQL database:", error);
+    throw error;
+  }
 };
 
 module.exports = databaseConnection;
