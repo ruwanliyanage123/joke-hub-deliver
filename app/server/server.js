@@ -20,7 +20,7 @@ app.listen(PORT, async () => {
   }
 });
 
-app.post("/api/createJoke", async (req, res) => {
+app.post("/joke-deliver/createJoke", async (req, res) => {
   const { jokeTitle, jokeType, jokeDescription } = req.body;
   const joke = new Joke(jokeTitle, jokeType, jokeDescription);
   try {
@@ -31,7 +31,7 @@ app.post("/api/createJoke", async (req, res) => {
   }
 });
 
-app.get("/api/getJokeById/:id", async (req, res) => {
+app.get("/joke-deliver/getJokeById/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const joke = await Joke.findById(id);
@@ -41,7 +41,7 @@ app.get("/api/getJokeById/:id", async (req, res) => {
   }
 });
 
-app.get("/api/getRandomJokeByType/:type", async (req, res) => {
+app.get("/joke-deliver/getRandomJokeByType/:type", async (req, res) => {
   const { type } = req.params;
   try {
     const joke = await Joke.findRandomByType(type);
@@ -55,7 +55,7 @@ app.get("/api/getRandomJokeByType/:type", async (req, res) => {
   }
 });
 
-app.get("/api/getActiveTypes", async (req, res) => {
+app.get("/joke-deliver/getActiveTypes", async (req, res) => {
   try {
     const jokeTypes = await Joke.findDistinctTypes();
     res.status(200).send(jokeTypes);
@@ -64,7 +64,7 @@ app.get("/api/getActiveTypes", async (req, res) => {
   }
 });
 
-app.get("/api/getAllJokes", async (req, res) => {
+app.get("/joke-deliver/getAllJokes", async (req, res) => {
   try {
     const jokes = await Joke.findAll();
     res.send(jokes);
@@ -73,7 +73,7 @@ app.get("/api/getAllJokes", async (req, res) => {
   }
 });
 
-app.put("/api/updateJoke/:id", async (req, res) => {
+app.put("/joke-deliver/updateJoke/:id", async (req, res) => {
   const { id } = req.params;
   const { jokeTitle, jokeType, jokeDescription } = req.body;
   try {
@@ -84,7 +84,7 @@ app.put("/api/updateJoke/:id", async (req, res) => {
   }
 });
 
-app.delete("/api/deleteJoke/:id", async (req, res) => {
+app.delete("/joke-deliver/deleteJoke/:id", async (req, res) => {
   const { id } = req.params;
   try {
     await Joke.deleteById(id);
