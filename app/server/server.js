@@ -3,7 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const databaseConnection = require("../database/database");
 const cors = require("cors");
-const PORT = 3001;
+const PORT = 3005;
 const app = express();
 
 // Use the cors middleware
