@@ -1,17 +1,18 @@
 const databaseConnection = require("../database/database");
 
 class Joke {
-  constructor(jokeTitle, jokeType, jokeDescription) {
+  constructor(jokeTitle, jokeType, jokeDescription, _id) {
     this.jokeTitle = jokeTitle;
     this.jokeType = jokeType;
     this.jokeDescription = jokeDescription;
+    this._id = _id;
   }
 
   static async save(joke) {
     const connection = await databaseConnection();
     const [result] = await connection.execute(
-      "INSERT INTO jokes (jokeTitle, jokeType, jokeDescription) VALUES (?, ?, ?)",
-      [joke.jokeTitle, joke.jokeType, joke.jokeDescription]
+      "INSERT INTO jokes (jokeTitle, jokeType, jokeDescription, jokeReference) VALUES (?, ?, ?, ?)",
+      [joke.jokeTitle, joke.jokeType, joke.jokeDescription, joke._id]
     );
     return result;
   }
@@ -19,7 +20,7 @@ class Joke {
   static async findById(id) {
     const connection = await databaseConnection();
     const [rows] = await connection.execute(
-      "SELECT * FROM jokes WHERE id = ?",
+      "SELECT * FROM jokes WHERE jokeReference = ?",
       [id]
     );
     return rows[0];
@@ -51,7 +52,7 @@ class Joke {
   static async updateById(id, joke) {
     const connection = await databaseConnection();
     const [result] = await connection.execute(
-      "UPDATE jokes SET jokeTitle = ?, jokeType = ?, jokeDescription = ? WHERE id = ?",
+      "UPDATE jokes SET jokeTitle = ?, jokeType = ?, jokeDescription = ? WHERE jokeReference = ?",
       [joke.jokeTitle, joke.jokeType, joke.jokeDescription, id]
     );
     return result;
@@ -60,7 +61,7 @@ class Joke {
   static async deleteById(id) {
     const connection = await databaseConnection();
     const [result] = await connection.execute(
-      "DELETE FROM jokes WHERE id = ?",
+      "DELETE FROM jokes WHERE jokeReference = ?",
       [id]
     );
     return result;

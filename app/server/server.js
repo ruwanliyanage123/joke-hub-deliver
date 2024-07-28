@@ -14,15 +14,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.listen(PORT, async () => {
   try {
     await databaseConnection();
-    console.log(`Server is running on ${PORT}`);
+    console.log(`Joke Deliver Server is running on ${PORT}`);
   } catch (error) {
     console.error("Failed to connect to database");
   }
 });
 
 app.post("/joke-deliver/createJoke", async (req, res) => {
-  const { jokeTitle, jokeType, jokeDescription } = req.body;
-  const joke = new Joke(jokeTitle, jokeType, jokeDescription);
+  const { jokeTitle, jokeType, jokeDescription, _id } = req.body;
+  const joke = new Joke(jokeTitle, jokeType, jokeDescription, _id);
   try {
     await Joke.save(joke);
     res.status(201).send({ message: "Joke created successfully", joke });
@@ -75,9 +75,14 @@ app.get("/joke-deliver/getAllJokes", async (req, res) => {
 
 app.put("/joke-deliver/updateJoke/:id", async (req, res) => {
   const { id } = req.params;
-  const { jokeTitle, jokeType, jokeDescription } = req.body;
+  const { jokeTitle, jokeType, jokeDescription, jokeReference } = req.body;
   try {
-    await Joke.updateById(id, { jokeTitle, jokeType, jokeDescription });
+    await Joke.updateById(id, {
+      jokeTitle,
+      jokeType,
+      jokeDescription,
+      jokeReference,
+    });
     res.send({ message: "Joke updated successfully" });
   } catch (error) {
     res.status(500).send({ message: "Error updating joke", error });
@@ -91,5 +96,19 @@ app.delete("/joke-deliver/deleteJoke/:id", async (req, res) => {
     res.send({ message: "Joke deleted successfully" });
   } catch (error) {
     res.status(500).send({ message: "Error deleting joke", error });
+  }
+});
+
+app.get("/joke-deliver/getRandomJokeByType/:type", async (req, res) => {
+  const { type } = req.params;
+  try {
+    const joke = await Joke.findRandomByType(type);
+    if (joke) {
+      res.send(joke);
+    } else {
+      res.status(404).send({ message: "No joke found with the given type" });
+    }
+  } catch (error) {
+    res.status(500).send({ message: "Error getting joke", error });
   }
 });

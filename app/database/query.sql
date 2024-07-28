@@ -2,5 +2,7 @@ CREATE TABLE jokes (
   id INT AUTO_INCREMENT PRIMARY KEY,
   jokeTitle VARCHAR(255) NOT NULL,
   jokeType VARCHAR(255) NOT NULL,
-  jokeDescription TEXT NOT NULL
+  jokeDescription TEXT NOT NULL,
+  jokeReference VARCHAR(255) NOT NULL
 );
+
